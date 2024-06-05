@@ -361,7 +361,7 @@ it is restored only once."
     ".<"  "\\leftarrow"    "..<" "\\longleftarrow"
     ".>"  "\\rightarrow"   "..>" "\\longrightarrow"
     ".'"  "\\prime"
-    ".."  "\\cdot")
+    )
   "Basic snippets. Expand only inside maths.")
 
 (defvar laas-subscript-snippets
