@@ -205,7 +205,7 @@ If inside {}, return nil to avoid triggering fraction expansion."
            (ignore-errors (up-list 1)      ; 尝试向前跳转到匹配的 }
            (eq (char-before) ?})
            (< (point) orig-pos)))))       ; 确保当前点在 {} 之间
-
+)
 (defun laas-smart-fraction ()
   "Expansion function used for auto-subscript snippets."
   (interactive)
