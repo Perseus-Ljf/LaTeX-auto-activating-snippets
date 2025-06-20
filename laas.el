@@ -184,9 +184,27 @@ it is restored only once."
                   (default-value 'post-self-insert-hook))
       (push #'laas--restore-smartparens-hook (default-value 'post-self-insert-hook)))))
 
+; (defun laas-frac-cond ()
+;   (cond ((and (= (char-before) ?/) (laas-mathp)) 'standalone-frac)
+;         ((laas-object-on-left-condition) 'wrapping-frac)))
+
 (defun laas-frac-cond ()
-  (cond ((and (= (char-before) ?/) (laas-mathp)) 'standalone-frac)
-        ((laas-object-on-left-condition) 'wrapping-frac)))
+  "Return 'standalone-frac or 'wrapping-frac based on context.
+If inside {}, return nil to avoid triggering fraction expansion."
+  (unless (laas-inside-braces-p)  ; 新增：如果不在 {} 之间才继续判断
+    (cond ((and (= (char-before) ?/) (laas-mathp)) 'standalone-frac)
+          ((laas-object-on-left-condition) 'wrapping-frac))))
+
+;; 新增辅助函数：检测是否在 {} 之间
+(defun laas-inside-braces-p ()
+  "Return non-nil if point is inside a pair of curly braces {}."
+  (save-excursion
+    (let ((orig-pos (point)))
+      (and (ignore-errors (up-list -1) t)  ; 尝试向后跳转到匹配的 {
+           (eq (char-after) ?{)
+           (ignore-errors (up-list 1)      ; 尝试向前跳转到匹配的 }
+           (eq (char-before) ?})
+           (< (point) orig-pos)))))       ; 确保当前点在 {} 之间
 
 (defun laas-smart-fraction ()
   "Expansion function used for auto-subscript snippets."
@@ -459,7 +477,6 @@ ab/ => \\frac{ab}{}
                     ("'q" . "sqrt")
                     ;; "influenced" by Gilles Castel
                     (".. " . ("\\dot{" . "} "))
-                    (",." . "vec")
                     (".," . "vec")
                     ("~ " . ("\\tilde{" . "} "))
                     ("hat" . "hat")
