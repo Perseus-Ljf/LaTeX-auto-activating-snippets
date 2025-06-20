@@ -199,12 +199,13 @@ If inside {}, return nil to avoid triggering fraction expansion."
 (defun laas-inside-braces-p ()
   "Return non-nil if point is inside a pair of curly braces {}."
   (save-excursion
-    (let ((orig-pos (point)))
-      (and (ignore-errors (up-list -1) t)  ; 尝试向后跳转到匹配的 {
-           (eq (char-after) ?{)
-           (ignore-errors (up-list 1)      ; 尝试向前跳转到匹配的 }
-           (eq (char-before) ?})
-           (< (point) orig-pos)))))       ; 确保当前点在 {} 之间
+      (let ((pos (point))
+            (open-brace (progn (search-backward "{" nil t) (point)))
+            (close-brace (progn (search-forward "}" nil t) (point))))
+        (and open-brace
+            close-brace
+            (> pos open-brace)
+            (< pos close-brace))))
 )
 (defun laas-smart-fraction ()
   "Expansion function used for auto-subscript snippets."
