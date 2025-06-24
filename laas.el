@@ -215,10 +215,10 @@ If inside {}, return nil to avoid triggering fraction expansion."
      (delete-char -1) ;; delete the previous / that isn't part of the key
      (cond
       ((featurep 'tempel)
-       (tempel-insert (list "\\frac{" 'p "}{" 'p "}")))
+       (tempel-insert (list "\\dfrac{" 'p "}{" 'p "}")))
       ((featurep 'yasnippet)
-       (yas-expand-snippet "\\frac{$1}{$2}$0"))
-      (t (insert "\\frac{}{}")
+       (yas-expand-snippet "\\dfrac{$1}{$2}$0"))
+      (t (insert "\\dfrac{}{}")
          (forward-char -3))))
     ('wrapping-frac
      (let* ((tex-obj (laas-identify-adjacent-tex-object))
@@ -236,10 +236,10 @@ If inside {}, return nil to avoid triggering fraction expansion."
        (delete-region start end)
        (cond
         ((featurep 'tempel)
-         (tempel-insert (list "\\frac{" content "}{" 'p "}")))
+         (tempel-insert (list "\\dfrac{" content "}{" 'p "}")))
         ((featurep 'yasnippet)
-         (yas-expand-snippet (format "\\frac{%s}{$2}$0" content)))
-        (t (insert "\\frac{" content "}{}")
+         (yas-expand-snippet (format "\\dfrac{%s}{$2}$0" content)))
+        (t (insert "\\dfrac{" content "}{}")
            (forward-char -1))))))
   (when (featurep 'smartparens)
     (laas--shut-up-smartparens)))
